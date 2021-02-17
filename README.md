@@ -1,0 +1,2 @@
+
+[![ReadMe Card](https://github-readme-stats.vercel.app/api/pin/?username=juniordsi&repo=online-shopping&show_owner=true&show_icons=true&theme=dark&langs_count=10)](https://github.com/anuraghazra/github-readme-stats)
