@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -43,6 +45,7 @@ public class TopicosController {
 	
 	/// BUSCAR TÓPICOS OU TÓPICO POR NOME
 	@GetMapping
+	@Cacheable(value = "buscarTopicos")
 	public Page<TopicoDto> buscarTopicos(@RequestParam(required = false) String nomeCurso,
 			@PageableDefault(page=0, size=10, sort="id", direction=Direction.DESC) Pageable paginacao) {
 		Page<Topico> topicos;
@@ -66,6 +69,7 @@ public class TopicosController {
 	/// CADASTRAR NOVO TÓPICO
 	@PostMapping
 	@Transactional
+	@CacheEvict(value = "buscarTopicos", allEntries = true)
 	public ResponseEntity<TopicoDto> cadastrarTopico(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.toTopico(cursoRepository);
 		topicoRepository.save(topico);
@@ -77,6 +81,7 @@ public class TopicosController {
 	
 	@PutMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "buscarTopicos", allEntries = true)
 	public ResponseEntity<TopicoDto> atualizarTopico(@PathVariable Long id, @RequestBody @Valid AtualizarTopicoForm form) {
 		Optional<Topico> optional = topicoRepository.findById(id);
 		if(optional.isPresent()) {
@@ -90,6 +95,7 @@ public class TopicosController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
+	@CacheEvict(value = "buscarTopicos", allEntries = true)
 	public ResponseEntity<?> excluirTopico(@PathVariable Long id) {
 		Optional<Topico> optional = topicoRepository.findById(id);
 		if(optional.isPresent()) {
