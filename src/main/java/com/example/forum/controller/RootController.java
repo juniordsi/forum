@@ -10,6 +10,6 @@ public class RootController {
 	
 	@GetMapping
 	public String init() {
-		return "working...";
+		return "forum";
 	}
 }
